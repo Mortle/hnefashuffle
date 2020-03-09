@@ -12,18 +12,18 @@ public abstract class Tile {
     String type;
     Pair<Integer, Integer> coordinates;
 
-    private static final Map<Pair<Integer, Integer>, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles(11);
+    private static final Map<Pair<Integer, Integer>, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
-    private static Map<Pair<Integer, Integer>, EmptyTile> createAllPossibleEmptyTiles(int boardSize) {
+    private static Map<Pair<Integer, Integer>, EmptyTile> createAllPossibleEmptyTiles() {
 
         final Map<Pair<Integer, Integer>, EmptyTile> emptyTileMap = new HashMap<>();
 
-        for(int x = 0; x < boardSize; x++) {
-            for(int y = 0; y < boardSize; y++) {
+        for(int x = 0; x < Board.SIZE; x++) {
+            for(int y = 0; y < Board.SIZE; y++) {
 
-                if (x == y && x == boardSize / 2) {
+                if (x == y && x == Board.SIZE / 2) {
                     emptyTileMap.put(new Pair<>(x, y), new EmptyTile(new Pair<>(x, y), "throne"));
-                } else if (x == 0 || y == 0 || x == boardSize - 1 || y == boardSize - 1) {
+                } else if (x == 0 || y == 0 || x == Board.SIZE - 1 || y == Board.SIZE - 1) {
                     emptyTileMap.put(new Pair<>(x, y), new EmptyTile(new Pair<>(x, y), "corner"));
                 } else {
                     emptyTileMap.put(new Pair<>(x, y), new EmptyTile(new Pair<>(x, y), "default"));
