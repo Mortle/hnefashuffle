@@ -16,8 +16,7 @@ import static java.lang.Math.pow;
 public abstract class Tile {
 
     String type;
-    int x;
-    int y;
+    Pair<Integer, Integer> coordinates;
 
     private static final Map<Pair<Integer, Integer>, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles(11);
 
@@ -25,15 +24,15 @@ public abstract class Tile {
 
         final Map<Pair<Integer, Integer>, EmptyTile> emptyTileMap = new HashMap<>();
 
-        for(int x = 0; x < pow(boardSize, 2); x++) {
-            for(int y = 0; y < pow(boardSize, 2); y++) {
+        for(int x = 0; x < boardSize; x++) {
+            for(int y = 0; y < boardSize; y++) {
 
                 if (x == y && x == boardSize / 2) {
-                    emptyTileMap.put(new Pair<>(x, y), new EmptyTile(x, y, "throne"));
+                    emptyTileMap.put(new Pair<>(x, y), new EmptyTile(new Pair<>(x, y), "throne"));
                 } else if (x == 0 || y == 0 || x == boardSize - 1 || y == boardSize - 1) {
-                    emptyTileMap.put(new Pair<>(x, y), new EmptyTile(x, y, "corner"));
+                    emptyTileMap.put(new Pair<>(x, y), new EmptyTile(new Pair<>(x, y), "corner"));
                 } else {
-                    emptyTileMap.put(new Pair<>(x, y), new EmptyTile(x, y, "default"));
+                    emptyTileMap.put(new Pair<>(x, y), new EmptyTile(new Pair<>(x, y), "default"));
                 }
             }
         }
@@ -41,9 +40,8 @@ public abstract class Tile {
         return Collections.unmodifiableMap(emptyTileMap);
     }
 
-    private Tile(int x, int y, String type) {
-        this.x = x;
-        this.y = y;
+    private Tile(Pair<Integer, Integer> coordinates, String type) {
+        this.coordinates = coordinates;
         this.type = type;
     }
 
@@ -55,8 +53,8 @@ public abstract class Tile {
 
     public static final class EmptyTile extends Tile {
 
-        private EmptyTile(final int x, final int y, final String type) {
-            super(x, y, type);
+        private EmptyTile(Pair<Integer, Integer> coordinates, String type) {
+            super(coordinates, type);
         }
 
         @Override
@@ -74,8 +72,8 @@ public abstract class Tile {
 
         private Piece piece;
 
-        private OccupiedTile(final int x, final int y, final String type, Piece piece) {
-            super(x, y, type);
+        private OccupiedTile(Pair<Integer, Integer> coordinates, final String type, Piece piece) {
+            super(coordinates, type);
             this.piece = piece;
         }
 
