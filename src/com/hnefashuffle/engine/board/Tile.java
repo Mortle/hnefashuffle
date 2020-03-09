@@ -7,12 +7,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.Math.pow;
-
-/**
- * Created by Mortle on 03/08/20.
- */
-
 public abstract class Tile {
 
     String type;

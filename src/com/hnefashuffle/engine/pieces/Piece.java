@@ -1,8 +1,22 @@
 package com.hnefashuffle.engine.pieces;
 
-/**
- * Created by Mortle on 03/08/20.
- */
+import com.hnefashuffle.engine.Union;
+import com.hnefashuffle.engine.board.Board;
+import com.hnefashuffle.engine.board.Move;
+import javafx.util.Pair;
 
-public class Piece {
+import java.util.List;
+
+public abstract class Piece {
+
+    protected Pair<Integer, Integer> piecePosition;
+    protected Union pieceUnion;
+
+    Piece(Pair<Integer, Integer> piecePosition, Union pieceUnion) {
+        this.piecePosition = piecePosition;
+        this.pieceUnion = pieceUnion;
+    }
+
+    public abstract List<Move> calculateLegalMoves(Board board);
+
 }
