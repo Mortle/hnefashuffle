@@ -33,7 +33,7 @@ public class Viking extends Piece {
                     this.pieceCoordinates != destinationCoordinates &&
                     board.isPathValid(this.pieceCoordinates, destinationCoordinates))
                 {
-                    legalMoves.add(new Move());
+                    legalMoves.add(new Move(board, this, destinationCoordinates));
                 }
             }
         }
