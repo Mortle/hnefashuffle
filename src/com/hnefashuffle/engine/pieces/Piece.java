@@ -5,18 +5,23 @@ import com.hnefashuffle.engine.board.Board;
 import com.hnefashuffle.engine.board.Move;
 import javafx.util.Pair;
 
-import java.util.List;
+import java.util.Collection;
 
 public abstract class Piece {
 
-    protected Pair<Integer, Integer> piecePosition;
+    protected Pair<Integer, Integer> pieceCoordinates;
     protected Union pieceUnion;
 
-    Piece(Pair<Integer, Integer> piecePosition, Union pieceUnion) {
-        this.piecePosition = piecePosition;
+    Piece(Pair<Integer, Integer> pieceCoordinates, Union pieceUnion) {
+        this.pieceCoordinates = pieceCoordinates;
         this.pieceUnion = pieceUnion;
     }
 
-    public abstract List<Move> calculateLegalMoves(Board board);
+    public Union getPieceUnion() {
+        return this.pieceUnion;
+    }
 
+    public abstract Collection<Move> calculateLegalMoves(Board board);
+
+    public abstract boolean isCaptured();
 }
