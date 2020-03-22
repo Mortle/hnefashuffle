@@ -23,13 +23,13 @@ public class Viking extends Piece {
             for(int y = 0; y < BoardUtils.SIZE; y++){
                 Coordinates destinationCoordinates = new Coordinates(x, y);
 
-                Tile destinationTile = Board.getTile(destinationCoordinates);
+                Tile destinationTile = board.getTile(destinationCoordinates);
 
                 assert destinationTile != null;
                 if (!destinationTile.isOccupied() &&
                     destinationTile.getType().equals("default") &&
                     this.pieceCoordinates != destinationCoordinates &&
-                    BoardUtils.isValidPath(this.pieceCoordinates, destinationCoordinates))
+                    BoardUtils.isValidPath(this.pieceCoordinates, destinationCoordinates, board))
                 {
                     legalMoves.add(new Move(board, this, destinationCoordinates));
                 }

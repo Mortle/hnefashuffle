@@ -25,12 +25,12 @@ public class King extends Piece {
             for(int y = 0; y < BoardUtils.SIZE; y++){
                 Coordinates destinationCoordinates = new Coordinates(x, y);
 
-                Tile destinationTile = Board.getTile(destinationCoordinates);
+                Tile destinationTile = board.getTile(destinationCoordinates);
 
                 assert destinationTile != null;
                 if (!destinationTile.isOccupied() &&
                     this.pieceCoordinates != destinationCoordinates &&
-                    BoardUtils.isValidPath(this.pieceCoordinates, destinationCoordinates) &&
+                    BoardUtils.isValidPath(this.pieceCoordinates, destinationCoordinates, board) &&
                     BoardUtils.isKingLimitedPath(this.pieceCoordinates, destinationCoordinates, STEP_LIMITATION))
                 {
                     legalMoves.add(new Move(board, this, destinationCoordinates));

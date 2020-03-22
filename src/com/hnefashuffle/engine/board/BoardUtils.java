@@ -7,7 +7,7 @@ public class BoardUtils {
 
     public static final int SIZE = 11;
 
-    public static boolean isValidPath(Coordinates pieceCoordinates, Coordinates destinationCoordinates) {
+    public static boolean isValidPath(Coordinates pieceCoordinates, Coordinates destinationCoordinates, Board board) {
 
         boolean equalX = pieceCoordinates.getXCoordinate() == destinationCoordinates.getXCoordinate();
         boolean equalY = pieceCoordinates.getYCoordinate() == destinationCoordinates.getYCoordinate();
@@ -20,14 +20,14 @@ public class BoardUtils {
         boolean isClear = true;
         if (equalX) {
             for(int x = pieceCoordinates.getXCoordinate(); x < destinationCoordinates.getXCoordinate() + 1; x++) {
-                if(Objects.requireNonNull(Board.getTile(new Coordinates(x, pieceCoordinates.getYCoordinate()))).isOccupied()) {
+                if(Objects.requireNonNull(board.getTile(new Coordinates(x, pieceCoordinates.getYCoordinate()))).isOccupied()) {
                     isClear = false;
                     break;
                 }
             }
         } else {
             for(int y = pieceCoordinates.getYCoordinate(); y < destinationCoordinates.getYCoordinate() + 1; y++) {
-                if(Objects.requireNonNull(Board.getTile(new Coordinates(pieceCoordinates.getXCoordinate(), y))).isOccupied()) {
+                if(Objects.requireNonNull(board.getTile(new Coordinates(pieceCoordinates.getXCoordinate(), y))).isOccupied()) {
                     isClear = false;
                     break;
                 }
