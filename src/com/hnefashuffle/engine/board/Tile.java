@@ -48,6 +48,10 @@ public abstract class Tile {
 
     public abstract Piece getPiece();
 
+    public Coordinates getTileCoordinates() {
+        return this.tileCoordinates;
+    }
+
     public String getType() { return tileType; }
 
     public static final class EmptyTile extends Tile {

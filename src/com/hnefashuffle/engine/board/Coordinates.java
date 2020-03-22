@@ -24,6 +24,18 @@ public class Coordinates {
         return coordinatesList;
     }
 
+    public static List<Coordinates> getCornersCoordinates() {
+        List<Coordinates> cornersCoordinates = new ArrayList<>();
+        for(int i = 0; i < BoardUtils.SIZE; i++) {
+            for(int j = 0; j < BoardUtils.SIZE; j++) {
+                if((i == 0 && j == 0) || (i == 0 && j == 10) || (i == 10 && j == 0) || (i == 10 && j == 10)) {
+                    cornersCoordinates.add(Coordinates.getCoordinates(i, j));
+                }
+            }
+        }
+        return cornersCoordinates;
+    }
+
     public int getXCoordinate(){
         return this.xCoordinate;
     }

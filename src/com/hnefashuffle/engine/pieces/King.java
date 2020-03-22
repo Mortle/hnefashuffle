@@ -28,6 +28,7 @@ public class King extends Piece {
                 Tile destinationTile = board.getTile(destinationCoordinates);
 
                 assert destinationTile != null;
+                assert destinationCoordinates != null;
                 if (!destinationTile.isOccupied() &&
                     this.pieceCoordinates != destinationCoordinates &&
                     BoardUtils.isValidPath(this.pieceCoordinates, destinationCoordinates, board) &&
@@ -40,13 +41,47 @@ public class King extends Piece {
         return Collections.unmodifiableCollection(legalMoves);
     }
 
+    public boolean isOnCornerTile() {
+        return Coordinates.getCornersCoordinates().contains(pieceCoordinates);
+    }
+
     @Override
-    public boolean isCaptured() {
-        return false;
+    public boolean isCaptured(Board board) {
+        int surroundersCounter = 0;
+        int xCoordinate = pieceCoordinates.getYCoordinate();
+        int yCoordinate = pieceCoordinates.getXCoordinate();
+
+        List<Coordinates> candidateCoordinates = new ArrayList<>();
+        candidateCoordinates.add(Coordinates.getCoordinates(xCoordinate, yCoordinate + 1));
+        candidateCoordinates.add(Coordinates.getCoordinates(xCoordinate + 1, yCoordinate));
+        candidateCoordinates.add(Coordinates.getCoordinates(xCoordinate, yCoordinate - 1));
+        candidateCoordinates.add(Coordinates.getCoordinates(xCoordinate - 1, yCoordinate));
+
+        List<Tile> candidateTiles = new ArrayList<>();
+        for(Coordinates coordinates : candidateCoordinates) {
+            if(coordinates != null) {
+                candidateTiles.add(board.getTile(coordinates));
+            }
+        }
+
+        for(Tile tile : candidateTiles) {
+            if (tile.getType().equals("corner") || tile.getType().equals("throne")) {
+                surroundersCounter++;
+            } else if (tile.getPiece() != null && tile.getPiece().getPieceUnion() == Union.ATTACKER) {
+                surroundersCounter++;
+            }
+        }
+
+        return surroundersCounter == 4;
+    }
+
+    @Override
+    public boolean isKing() {
+        return true;
     }
 
     @Override
     public String toString() {
-        return PieceType.KING.toString();
+        return "K";
     }
 }

@@ -4,6 +4,9 @@ import com.hnefashuffle.engine.Union;
 import com.hnefashuffle.engine.pieces.King;
 import com.hnefashuffle.engine.pieces.Piece;
 import com.hnefashuffle.engine.pieces.Viking;
+import com.hnefashuffle.engine.player.AttackerPlayer;
+import com.hnefashuffle.engine.player.DefenderPlayer;
+import com.hnefashuffle.engine.player.Player;
 
 import java.util.*;
 
@@ -12,14 +15,39 @@ public class Board {
     private Map<Coordinates, Tile> gameBoard;
     private Collection<Piece> attackersPieces;
     private Collection<Piece> defendersPieces;
+    private AttackerPlayer attackersPlayer;
+    private DefenderPlayer defendersPlayer;
 
     private Board(Builder builder) {
         this.gameBoard = createGameBoard(builder);
         this.attackersPieces = calculateActivePieces(this.gameBoard, Union.ATTACKER);
         this.defendersPieces = calculateActivePieces(this.gameBoard, Union.DEFENDER);
-
         Collection<Move> attackersLegalMoves = calculateLegalMoves(this.attackersPieces);
         Collection<Move> defendersLegalMoves = calculateLegalMoves(this.defendersPieces);
+        this.attackersPlayer = new AttackerPlayer(this, attackersLegalMoves);
+        this.defendersPlayer = new DefenderPlayer(this, defendersLegalMoves);
+    }
+
+    public Player getAttackersPlayer() {
+        return attackersPlayer;
+    }
+    public Player getDefendersPlayer() {
+        return defendersPlayer;
+    }
+    public Collection<Piece> getAttackersPieces() {
+        return this.attackersPieces;
+    }
+    public Collection<Piece> getDefendersPieces() {
+        return this.defendersPieces;
+    }
+
+    public King getKing() {
+        for(Piece piece : defendersPieces) {
+            if(piece.isKing()) {
+                return (King) piece;
+            }
+        }
+        throw new RuntimeException("Should not reach here! Not a valid board!");
     }
 
     private Collection<Move> calculateLegalMoves(Collection<Piece> pieces) {
