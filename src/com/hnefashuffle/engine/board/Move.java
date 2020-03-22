@@ -13,4 +13,8 @@ public class Move {
         this.movedPiece = movedPiece;
         this.destinationCoordinates = destinationCoordinates;
     }
+
+    public Board execute() {
+        return null;
+    }
 }

@@ -4,11 +4,8 @@ import com.hnefashuffle.engine.Union;
 import com.hnefashuffle.engine.board.Board;
 import com.hnefashuffle.engine.board.Coordinates;
 import com.hnefashuffle.engine.board.Move;
-import com.hnefashuffle.engine.board.Tile;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 // TODO: piece interface instead of class
 public abstract class Piece {

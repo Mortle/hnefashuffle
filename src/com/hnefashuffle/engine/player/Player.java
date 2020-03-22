@@ -22,7 +22,12 @@ public abstract class Player {
     }
 
     public MoveTransition makeMove(Move move) {
-        return null;
+        if(!isMoveLegal(move)) {
+            return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
+        }
+        Board transitionBoard = move.execute();
+
+        return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
     }
 
     public abstract Collection<Piece> getActivePieces();
