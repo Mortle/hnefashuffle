@@ -15,17 +15,17 @@ public abstract class Tile {
 
     private static Map<Coordinates, EmptyTile> createAllPossibleEmptyTiles() {
 
-        final Map<Coordinates, EmptyTile> emptyTileMap = new HashMap<>();
+        Map<Coordinates, EmptyTile> emptyTileMap = new HashMap<>();
 
-        for(int x = 0; x < Board.SIZE; x++) {
-            for(int y = 0; y < Board.SIZE; y++) {
+        for(int i = 0; i < BoardUtils.SIZE; i++) {
+            for(int j = 0; j < BoardUtils.SIZE; j++) {
 
-                if (x == y && x == Board.SIZE / 2) {
-                    emptyTileMap.put(new Coordinates(x, y), new EmptyTile(new Coordinates(x, y), "throne"));
-                } else if (x == 0 || y == 0 || x == Board.SIZE - 1 || y == Board.SIZE - 1) {
-                    emptyTileMap.put(new Coordinates(x, y), new EmptyTile(new Coordinates(x, y), "corner"));
+                if (i == j && i == BoardUtils.SIZE / 2) {
+                    emptyTileMap.put(new Coordinates(i, j), new EmptyTile(new Coordinates(i, j), "throne"));
+                } else if (i == 0 || j == 0 || i == BoardUtils.SIZE - 1 || j == BoardUtils.SIZE - 1) {
+                    emptyTileMap.put(new Coordinates(i, j), new EmptyTile(new Coordinates(i, j), "corner"));
                 } else {
-                    emptyTileMap.put(new Coordinates(x, y), new EmptyTile(new Coordinates(x, y), "default"));
+                    emptyTileMap.put(new Coordinates(i, j), new EmptyTile(new Coordinates(i, j), "default"));
                 }
             }
         }
@@ -36,6 +36,10 @@ public abstract class Tile {
     private Tile(Coordinates tileCoordinates, String tileType) {
         this.tileCoordinates = tileCoordinates;
         this.tileType = tileType;
+    }
+
+    public static Tile createTile(Coordinates tileCoordinates, Piece piece, String tileType) {
+        return piece != null ? new OccupiedTile(tileCoordinates, tileType, piece) : EMPTY_TILES_CACHE.get(tileCoordinates);
     }
 
     public abstract boolean isOccupied();

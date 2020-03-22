@@ -2,7 +2,6 @@ package com.hnefashuffle.engine.pieces;
 
 import com.hnefashuffle.engine.Union;
 import com.hnefashuffle.engine.board.*;
-import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public class Viking extends Piece {
 
-    Viking(Coordinates pieceCoordinates, Union pieceUnion) {
+    public Viking(Coordinates pieceCoordinates, Union pieceUnion) {
         super(pieceCoordinates, pieceUnion);
     }
 
@@ -20,8 +19,8 @@ public class Viking extends Piece {
 
         List<Move> legalMoves = new ArrayList<>();
 
-        for(int x = 0; x < board.getSize(); x++){
-            for(int y = 0; y < board.getSize(); y++){
+        for(int x = 0; x < BoardUtils.SIZE; x++){
+            for(int y = 0; y < BoardUtils.SIZE; y++){
                 Coordinates destinationCoordinates = new Coordinates(x, y);
 
                 Tile destinationTile = Board.getTile(destinationCoordinates);
@@ -30,7 +29,7 @@ public class Viking extends Piece {
                 if (!destinationTile.isOccupied() &&
                     destinationTile.getType().equals("default") &&
                     this.pieceCoordinates != destinationCoordinates &&
-                    BoardUtils.isPathValid(this.pieceCoordinates, destinationCoordinates))
+                    BoardUtils.isValidPath(this.pieceCoordinates, destinationCoordinates))
                 {
                     legalMoves.add(new Move(board, this, destinationCoordinates));
                 }

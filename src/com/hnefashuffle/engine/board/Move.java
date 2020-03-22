@@ -1,7 +1,6 @@
 package com.hnefashuffle.engine.board;
 
 import com.hnefashuffle.engine.pieces.Piece;
-import javafx.util.Pair;
 
 public class Move {
 

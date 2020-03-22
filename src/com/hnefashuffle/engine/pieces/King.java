@@ -2,7 +2,6 @@ package com.hnefashuffle.engine.pieces;
 
 import com.hnefashuffle.engine.Union;
 import com.hnefashuffle.engine.board.*;
-import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +12,7 @@ public class King extends Piece {
 
     private static final int STEP_LIMITATION = 3;
 
-    King(Coordinates pieceCoordinates) {
+    public King(Coordinates pieceCoordinates) {
         super(pieceCoordinates, Union.DEFENDER);
     }
 
@@ -22,8 +21,8 @@ public class King extends Piece {
 
         List<Move> legalMoves = new ArrayList<>();
 
-        for(int x = 0; x < board.getSize(); x++){
-            for(int y = 0; y < board.getSize(); y++){
+        for(int x = 0; x < BoardUtils.SIZE; x++){
+            for(int y = 0; y < BoardUtils.SIZE; y++){
                 Coordinates destinationCoordinates = new Coordinates(x, y);
 
                 Tile destinationTile = Board.getTile(destinationCoordinates);
@@ -31,7 +30,7 @@ public class King extends Piece {
                 assert destinationTile != null;
                 if (!destinationTile.isOccupied() &&
                     this.pieceCoordinates != destinationCoordinates &&
-                    BoardUtils.isPathValid(this.pieceCoordinates, destinationCoordinates) &&
+                    BoardUtils.isValidPath(this.pieceCoordinates, destinationCoordinates) &&
                     BoardUtils.isKingLimitedPath(this.pieceCoordinates, destinationCoordinates, STEP_LIMITATION))
                 {
                     legalMoves.add(new Move(board, this, destinationCoordinates));

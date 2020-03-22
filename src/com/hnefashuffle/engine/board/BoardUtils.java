@@ -1,9 +1,13 @@
 package com.hnefashuffle.engine.board;
 
+import java.awt.*;
 import java.util.Objects;
 
 public class BoardUtils {
-    public static boolean isPathValid(Coordinates pieceCoordinates, Coordinates destinationCoordinates) {
+
+    public static final int SIZE = 11;
+
+    public static boolean isValidPath(Coordinates pieceCoordinates, Coordinates destinationCoordinates) {
 
         boolean equalX = pieceCoordinates.getXCoordinate() == destinationCoordinates.getXCoordinate();
         boolean equalY = pieceCoordinates.getYCoordinate() == destinationCoordinates.getYCoordinate();
