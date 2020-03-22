@@ -1,7 +1,6 @@
 package com.hnefashuffle.engine.board;
 
 import com.hnefashuffle.engine.pieces.Piece;
-import javafx.util.Pair;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,25 +8,24 @@ import java.util.Map;
 
 public abstract class Tile {
 
-    String type;
-    Pair<Integer, Integer> coordinates;
+    String tileType;
+    Coordinates tileCoordinates;
 
-    private static final Map<Pair<Integer, Integer>, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
+    private static final Map<Coordinates, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
-    // TODO: `class Coorinates`
-    private static Map<Pair<Integer, Integer>, EmptyTile> createAllPossibleEmptyTiles() {
+    private static Map<Coordinates, EmptyTile> createAllPossibleEmptyTiles() {
 
-        final Map<Pair<Integer, Integer>, EmptyTile> emptyTileMap = new HashMap<>();
+        final Map<Coordinates, EmptyTile> emptyTileMap = new HashMap<>();
 
         for(int x = 0; x < Board.SIZE; x++) {
             for(int y = 0; y < Board.SIZE; y++) {
 
                 if (x == y && x == Board.SIZE / 2) {
-                    emptyTileMap.put(new Pair<>(x, y), new EmptyTile(new Pair<>(x, y), "throne"));
+                    emptyTileMap.put(new Coordinates(x, y), new EmptyTile(new Coordinates(x, y), "throne"));
                 } else if (x == 0 || y == 0 || x == Board.SIZE - 1 || y == Board.SIZE - 1) {
-                    emptyTileMap.put(new Pair<>(x, y), new EmptyTile(new Pair<>(x, y), "corner"));
+                    emptyTileMap.put(new Coordinates(x, y), new EmptyTile(new Coordinates(x, y), "corner"));
                 } else {
-                    emptyTileMap.put(new Pair<>(x, y), new EmptyTile(new Pair<>(x, y), "default"));
+                    emptyTileMap.put(new Coordinates(x, y), new EmptyTile(new Coordinates(x, y), "default"));
                 }
             }
         }
@@ -35,21 +33,21 @@ public abstract class Tile {
         return Collections.unmodifiableMap(emptyTileMap);
     }
 
-    private Tile(Pair<Integer, Integer> coordinates, String type) {
-        this.coordinates = coordinates;
-        this.type = type;
+    private Tile(Coordinates tileCoordinates, String tileType) {
+        this.tileCoordinates = tileCoordinates;
+        this.tileType = tileType;
     }
 
     public abstract boolean isOccupied();
 
     public abstract Piece getPiece();
 
-    public String getType() { return type; }
+    public String getType() { return tileType; }
 
     public static final class EmptyTile extends Tile {
 
-        private EmptyTile(Pair<Integer, Integer> coordinates, String type) {
-            super(coordinates, type);
+        private EmptyTile(Coordinates tileCoordinates, String type) {
+            super(tileCoordinates, type);
         }
 
         @Override
@@ -67,8 +65,8 @@ public abstract class Tile {
 
         private Piece piece;
 
-        private OccupiedTile(Pair<Integer, Integer> coordinates, final String type, Piece piece) {
-            super(coordinates, type);
+        private OccupiedTile(Coordinates tileCoordinates, final String type, Piece piece) {
+            super(tileCoordinates, type);
             this.piece = piece;
         }
 

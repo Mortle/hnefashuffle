@@ -1,7 +1,5 @@
 package com.hnefashuffle.engine.board;
 
-import javafx.util.Pair;
-
 import java.util.Objects;
 
 public class BoardUtils {
