@@ -23,7 +23,7 @@ public class King extends Piece {
 
         for(int x = 0; x < BoardUtils.SIZE; x++){
             for(int y = 0; y < BoardUtils.SIZE; y++){
-                Coordinates destinationCoordinates = new Coordinates(x, y);
+                Coordinates destinationCoordinates = Coordinates.getCoordinates(x, y);
 
                 Tile destinationTile = board.getTile(destinationCoordinates);
 
@@ -43,5 +43,10 @@ public class King extends Piece {
     @Override
     public boolean isCaptured() {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return PieceType.KING.toString();
     }
 }

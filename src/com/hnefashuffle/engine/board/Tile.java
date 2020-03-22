@@ -1,5 +1,6 @@
 package com.hnefashuffle.engine.board;
 
+import com.hnefashuffle.engine.Union;
 import com.hnefashuffle.engine.pieces.Piece;
 
 import java.util.Collections;
@@ -11,7 +12,7 @@ public abstract class Tile {
     String tileType;
     Coordinates tileCoordinates;
 
-    private static final Map<Coordinates, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
+    private static Map<Coordinates, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
     private static Map<Coordinates, EmptyTile> createAllPossibleEmptyTiles() {
 
@@ -19,13 +20,14 @@ public abstract class Tile {
 
         for(int i = 0; i < BoardUtils.SIZE; i++) {
             for(int j = 0; j < BoardUtils.SIZE; j++) {
+                Coordinates coordinates = Coordinates.getCoordinates(i, j);
 
                 if (i == j && i == BoardUtils.SIZE / 2) {
-                    emptyTileMap.put(new Coordinates(i, j), new EmptyTile(new Coordinates(i, j), "throne"));
+                    emptyTileMap.put(coordinates, new EmptyTile(coordinates, "throne"));
                 } else if (i == 0 || j == 0 || i == BoardUtils.SIZE - 1 || j == BoardUtils.SIZE - 1) {
-                    emptyTileMap.put(new Coordinates(i, j), new EmptyTile(new Coordinates(i, j), "corner"));
+                    emptyTileMap.put(coordinates, new EmptyTile(coordinates, "corner"));
                 } else {
-                    emptyTileMap.put(new Coordinates(i, j), new EmptyTile(new Coordinates(i, j), "default"));
+                    emptyTileMap.put(coordinates, new EmptyTile(coordinates, "default"));
                 }
             }
         }
@@ -55,6 +57,11 @@ public abstract class Tile {
         }
 
         @Override
+        public String toString() {
+            return "-";
+        }
+
+        @Override
         public boolean isOccupied() {
             return false;
         }
@@ -72,6 +79,11 @@ public abstract class Tile {
         private OccupiedTile(Coordinates tileCoordinates, final String type, Piece piece) {
             super(tileCoordinates, type);
             this.piece = piece;
+        }
+
+        @Override
+        public String toString() {
+            return piece.getPieceUnion() == Union.ATTACKER ? piece.toString().toLowerCase() : piece.toString();
         }
 
         @Override

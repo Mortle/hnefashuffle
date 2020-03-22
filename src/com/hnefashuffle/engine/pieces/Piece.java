@@ -4,7 +4,6 @@ import com.hnefashuffle.engine.Union;
 import com.hnefashuffle.engine.board.Board;
 import com.hnefashuffle.engine.board.Coordinates;
 import com.hnefashuffle.engine.board.Move;
-import javafx.util.Pair;
 
 import java.util.Collection;
 
@@ -30,4 +29,19 @@ public abstract class Piece {
     public abstract Collection<Move> calculateLegalMoves(Board board);
 
     public abstract boolean isCaptured();
+
+    public enum PieceType {
+        KING("K"), VIKING("V");
+
+        private String pieceName;
+
+        PieceType(String pieceName) {
+            this.pieceName = pieceName;
+        }
+
+        @Override
+        public String toString() {
+            return this.pieceName;
+        }
+    }
 }
