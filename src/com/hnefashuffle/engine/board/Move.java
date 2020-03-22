@@ -7,9 +7,9 @@ public class Move {
 
     Board board;
     Piece movedPiece;
-    Pair<Integer, Integer> destinationCoordinates;
+    Coordinates destinationCoordinates;
 
-    public Move(Board board, Piece movedPiece, Pair<Integer, Integer> destinationCoordinates) {
+    public Move(Board board, Piece movedPiece, Coordinates destinationCoordinates) {
         this.board = board;
         this.movedPiece = movedPiece;
         this.destinationCoordinates = destinationCoordinates;

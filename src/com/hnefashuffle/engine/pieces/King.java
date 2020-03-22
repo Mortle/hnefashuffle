@@ -1,10 +1,7 @@
 package com.hnefashuffle.engine.pieces;
 
 import com.hnefashuffle.engine.Union;
-import com.hnefashuffle.engine.board.Board;
-import com.hnefashuffle.engine.board.BoardUtils;
-import com.hnefashuffle.engine.board.Move;
-import com.hnefashuffle.engine.board.Tile;
+import com.hnefashuffle.engine.board.*;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -16,7 +13,7 @@ public class King extends Piece {
 
     private static final int STEP_LIMITATION = 3;
 
-    King(Pair<Integer, Integer> pieceCoordinates) {
+    King(Coordinates pieceCoordinates) {
         super(pieceCoordinates, Union.DEFENDER);
     }
 
@@ -27,7 +24,7 @@ public class King extends Piece {
 
         for(int x = 0; x < board.getSize(); x++){
             for(int y = 0; y < board.getSize(); y++){
-                Pair<Integer, Integer> destinationCoordinates = new Pair<Integer, Integer>(x, y);
+                Coordinates destinationCoordinates = new Coordinates(x, y);
 
                 Tile destinationTile = Board.getTile(destinationCoordinates);
 

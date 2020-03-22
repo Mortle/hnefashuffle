@@ -5,10 +5,10 @@ import javafx.util.Pair;
 import java.util.Objects;
 
 public class BoardUtils {
-    public static boolean isPathValid(Pair<Integer, Integer> pieceCoordinates, Pair<Integer, Integer> destinationCoordinates) {
+    public static boolean isPathValid(Coordinates pieceCoordinates, Coordinates destinationCoordinates) {
 
-        boolean equalX = pieceCoordinates.getKey().equals(destinationCoordinates.getKey());
-        boolean equalY = pieceCoordinates.getValue().equals(destinationCoordinates.getValue());
+        boolean equalX = pieceCoordinates.getXCoordinate() == destinationCoordinates.getXCoordinate();
+        boolean equalY = pieceCoordinates.getYCoordinate() == destinationCoordinates.getYCoordinate();
 
         boolean isStraight = equalX ^ equalY;
         if (!isStraight) {
@@ -17,15 +17,15 @@ public class BoardUtils {
 
         boolean isClear = true;
         if (equalX) {
-            for(int x = pieceCoordinates.getKey(); x < destinationCoordinates.getKey() + 1; x++) {
-                if(Objects.requireNonNull(Board.getTile(new Pair<>(x, pieceCoordinates.getValue()))).isOccupied()) {
+            for(int x = pieceCoordinates.getXCoordinate(); x < destinationCoordinates.getXCoordinate() + 1; x++) {
+                if(Objects.requireNonNull(Board.getTile(new Coordinates(x, pieceCoordinates.getYCoordinate()))).isOccupied()) {
                     isClear = false;
                     break;
                 }
             }
         } else {
-            for(int y = pieceCoordinates.getValue(); y < destinationCoordinates.getValue() + 1; y++) {
-                if(Objects.requireNonNull(Board.getTile(new Pair<>(pieceCoordinates.getKey(), y))).isOccupied()) {
+            for(int y = pieceCoordinates.getYCoordinate(); y < destinationCoordinates.getYCoordinate() + 1; y++) {
+                if(Objects.requireNonNull(Board.getTile(new Coordinates(pieceCoordinates.getXCoordinate(), y))).isOccupied()) {
                     isClear = false;
                     break;
                 }
@@ -35,8 +35,8 @@ public class BoardUtils {
         return isClear;
     }
 
-    public static boolean isKingLimitedPath(Pair<Integer, Integer> pieceCoordinates, Pair<Integer, Integer> destinationCoordinates, int limitation) {
-        return Math.abs(pieceCoordinates.getKey() - destinationCoordinates.getKey()) <= limitation &&
-                Math.abs(pieceCoordinates.getValue() - destinationCoordinates.getValue()) <= limitation;
+    public static boolean isKingLimitedPath(Coordinates pieceCoordinates, Coordinates destinationCoordinates, int limitation) {
+        return Math.abs(pieceCoordinates.getXCoordinate() - destinationCoordinates.getXCoordinate()) <= limitation &&
+                Math.abs(pieceCoordinates.getYCoordinate() - destinationCoordinates.getYCoordinate()) <= limitation;
     }
 }

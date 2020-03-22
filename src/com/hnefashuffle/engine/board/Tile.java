@@ -14,6 +14,7 @@ public abstract class Tile {
 
     private static final Map<Pair<Integer, Integer>, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
+    // TODO: `class Coorinates`
     private static Map<Pair<Integer, Integer>, EmptyTile> createAllPossibleEmptyTiles() {
 
         final Map<Pair<Integer, Integer>, EmptyTile> emptyTileMap = new HashMap<>();
