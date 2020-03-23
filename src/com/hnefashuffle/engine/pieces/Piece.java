@@ -7,7 +7,6 @@ import com.hnefashuffle.engine.board.Move;
 
 import java.util.Collection;
 
-// TODO: piece interface instead of class
 public abstract class Piece {
 
     protected Coordinates pieceCoordinates;
@@ -27,8 +26,21 @@ public abstract class Piece {
     }
 
     public abstract Collection<Move> calculateLegalMoves(Board board);
-
     public abstract boolean isCaptured(Board board);
-
     public abstract boolean isKing();
+    public abstract Piece movePiece(Move move);
+    public abstract String pieceType();
+
+    @Override
+    public boolean equals(Object other) {
+        if(this == other) {
+            return true;
+        }
+        if(!(other instanceof Piece)) {
+            return false;
+        }
+        Piece otherPiece = (Piece) other;
+        return pieceCoordinates == otherPiece.getPieceCoordinates() && pieceUnion == otherPiece.getPieceUnion() &&
+                this.pieceType().equals(otherPiece.pieceType());
+    }
 }
