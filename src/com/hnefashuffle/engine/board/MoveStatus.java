@@ -1,4 +1,4 @@
-package com.hnefashuffle.engine.player;
+package com.hnefashuffle.engine.board;
 
 public enum MoveStatus {
     DONE {

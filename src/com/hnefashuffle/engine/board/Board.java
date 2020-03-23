@@ -17,6 +17,7 @@ public class Board {
     private Collection<Piece> defendersPieces;
     private AttackerPlayer attackersPlayer;
     private DefenderPlayer defendersPlayer;
+    private Player currentPlayer;
 
     private Board(Builder builder) {
         this.gameBoard = createGameBoard(builder);
@@ -26,6 +27,7 @@ public class Board {
         Collection<Move> defendersLegalMoves = calculateLegalMoves(this.defendersPieces);
         this.attackersPlayer = new AttackerPlayer(this, attackersLegalMoves);
         this.defendersPlayer = new DefenderPlayer(this, defendersLegalMoves);
+        this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.attackersPlayer, this.defendersPlayer);
     }
 
     public Player getAttackersPlayer() {
@@ -33,6 +35,9 @@ public class Board {
     }
     public Player getDefendersPlayer() {
         return defendersPlayer;
+    }
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
     public Collection<Piece> getAttackersPieces() {
         return this.attackersPieces;

@@ -80,7 +80,17 @@ public class Viking extends Piece {
     }
 
     @Override
+    public Viking movePiece(Move move) {
+        return new Viking(move.getDestinationCoordinates(), move.getMovedPiece().getPieceUnion());
+    }
+
+    @Override
     public String toString() {
         return "V";
+    }
+
+    @Override
+    public String pieceType() {
+        return "VIKING";
     }
 }

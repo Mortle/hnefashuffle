@@ -1,7 +1,5 @@
 package com.hnefashuffle.engine.board;
 
-import com.hnefashuffle.engine.player.MoveStatus;
-
 public class MoveTransition {
     private Board transitionBoard;
     private Move move;
