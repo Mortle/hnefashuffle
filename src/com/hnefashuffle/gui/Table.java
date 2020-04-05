@@ -6,12 +6,16 @@ import com.hnefashuffle.engine.pieces.Piece;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static javax.swing.SwingUtilities.isLeftMouseButton;
@@ -21,6 +25,8 @@ public class Table {
     private JFrame gameFrame;
     private BoardPanel boardPanel;
     private Board gameBoard;
+
+    private boolean highlightLegalMoves;
 
     private Tile sourceTile;
     private Tile destinationTile;
@@ -32,12 +38,13 @@ public class Table {
 
     private static String pieceIconPath = "res/pieces/default/";
 
-    private static Color defaultTileColor = Color.decode("#FFB965");
-    private static Color cornerTileColor = Color.decode("#925000");
-    private static Color throneTileColor = Color.decode("#925000");
+    private static Color defaultTileColor = Color.decode("#FFF1CE");
+    private static Color cornerTileColor = Color.decode("#E6D4A8");
+    private static Color throneTileColor = Color.decode("#E6D4A8");
     private static Color tileBorderColor = Color.decode("#000000");
 
     public Table() {
+        this.highlightLegalMoves = true;
         this.gameBoard = Board.createInitialBoard();
         this.gameFrame = new JFrame("Hnefashuffle");
         this.gameFrame.setLayout(new BorderLayout());
@@ -55,6 +62,7 @@ public class Table {
     private JMenuBar createTableMenuBar() {
         JMenuBar tableMenuBar = new JMenuBar();
         tableMenuBar.add(createFileMenu());
+        tableMenuBar.add(createPreferencesMenu());
         return tableMenuBar;
     }
 
@@ -63,12 +71,23 @@ public class Table {
         JMenuItem openPGNmenuItem = new JMenuItem("Load PGN File");
         openPGNmenuItem.addActionListener(actionEvent -> System.out.println("Open Up that PGN File!"));
         fileMenu.add(openPGNmenuItem);
-
         JMenuItem exitMenuItem = new JMenuItem("Exit");
         exitMenuItem.addActionListener(actionEvent -> System.exit(0));
         fileMenu.add(exitMenuItem);
-
         return fileMenu;
+    }
+
+    private JMenu createPreferencesMenu() {
+        JMenu preferencesMenu = new JMenu("Preferences");
+        JCheckBoxMenuItem legalMoveHighlighterCheckbox = new JCheckBoxMenuItem("Highlight legal moves", true);
+        legalMoveHighlighterCheckbox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                highlightLegalMoves = legalMoveHighlighterCheckbox.isSelected();
+            }
+        });
+        preferencesMenu.add(legalMoveHighlighterCheckbox);
+        return preferencesMenu;
     }
 
     private class BoardPanel extends JPanel {
@@ -188,8 +207,30 @@ public class Table {
             assignTileColor();
             setBorder(BorderFactory.createLineBorder(tileBorderColor));
             assignTilePieceIcon(board);
+            highlightLegals(board);
             validate();
             repaint();
+        }
+
+        private void highlightLegals(Board board) {
+            if(highlightLegalMoves) {
+                for(Move move : pieceLegalMoves(board)) {
+                    if(move.getDestinationCoordinates() == this.tileCoordinates) {
+                        try {
+                            add(new JLabel(new ImageIcon(ImageIO.read(new File("res/tiles/highlight.png")))));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+
+        private Collection<Move> pieceLegalMoves(Board board) {
+            if (playerMovedPiece != null && playerMovedPiece.getPieceUnion() == board.getCurrentPlayer().getUnion()) {
+                return playerMovedPiece.calculateLegalMoves(board);
+            }
+            return Collections.emptyList();
         }
     }
 }

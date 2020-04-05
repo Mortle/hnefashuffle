@@ -152,7 +152,7 @@ public class Board {
         builder.setPiece(new Viking(Coordinates.getCoordinates(10, 6), Union.ATTACKER));
         builder.setPiece(new Viking(Coordinates.getCoordinates(10, 7), Union.ATTACKER));
 
-        builder.setMoveMaker(Union.ATTACKER);
+        builder.setMoveMaker(Union.DEFENDER);
         return builder.build();
     }
 
