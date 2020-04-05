@@ -51,7 +51,7 @@ public class Move {
         }
         // Move the movedPiece
         builder.setPiece(this.movedPiece.movePiece(this));
-        builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getUnion());
+        builder.setMoveMaker(this.board.getCurrentPlayer().getUnion());
 
         return builder.build();
     }
