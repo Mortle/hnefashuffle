@@ -1,24 +1,30 @@
 package com.hnefashuffle.gui;
 
-import com.hnefashuffle.engine.board.Board;
-import com.hnefashuffle.engine.board.BoardUtils;
-import com.hnefashuffle.engine.board.Coordinates;
+import com.hnefashuffle.engine.board.*;
+import com.hnefashuffle.engine.pieces.Piece;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.swing.SwingUtilities.isLeftMouseButton;
+import static javax.swing.SwingUtilities.isRightMouseButton;
+
 public class Table {
     private JFrame gameFrame;
     private BoardPanel boardPanel;
     private Board gameBoard;
+
+    private Tile sourceTile;
+    private Tile destinationTile;
+    private Piece playerMovedPiece;
 
     private static Dimension OUTER_FRAME_DIMENSION = new Dimension(600,600);
     private static Dimension BOARD_PANEL_DIMENSION = new Dimension(440,440);
@@ -55,21 +61,11 @@ public class Table {
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
         JMenuItem openPGNmenuItem = new JMenuItem("Load PGN File");
-        openPGNmenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("Open Up that PGN File!");
-            }
-        });
+        openPGNmenuItem.addActionListener(actionEvent -> System.out.println("Open Up that PGN File!"));
         fileMenu.add(openPGNmenuItem);
 
         JMenuItem exitMenuItem = new JMenuItem("Exit");
-        exitMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                System.exit(0);
-            }
-        });
+        exitMenuItem.addActionListener(actionEvent -> System.exit(0));
         fileMenu.add(exitMenuItem);
 
         return fileMenu;
@@ -91,6 +87,16 @@ public class Table {
             setPreferredSize(BOARD_PANEL_DIMENSION);
             validate();
         }
+
+        public void drawBoard(Board board) {
+            removeAll();
+            for(TilePanel tilePanel : boardTiles) {
+                tilePanel.drawTile(board);
+                add(tilePanel);
+            }
+            validate();
+            repaint();
+        }
     }
 
     private class TilePanel extends JPanel {
@@ -103,6 +109,54 @@ public class Table {
             assignTileColor();
             setBorder(BorderFactory.createLineBorder(tileBorderColor));
             assignTilePieceIcon(gameBoard);
+
+            addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent mouseEvent) {
+                    if(isRightMouseButton(mouseEvent)) {
+                        sourceTile = null;
+                        destinationTile = null;
+                        playerMovedPiece = null;
+                    } else if (isLeftMouseButton(mouseEvent)) {
+                        if (sourceTile == null) {
+                            sourceTile = gameBoard.getTile(tileCoordinates);
+                            playerMovedPiece = sourceTile.getPiece();
+                            if (playerMovedPiece == null) {
+                                sourceTile = null;
+                            }
+                        } else {
+                            destinationTile = gameBoard.getTile(tileCoordinates);
+                            Move move = Move.createMove(gameBoard, sourceTile.getTileCoordinates(), destinationTile.getTileCoordinates());
+                            MoveTransition transition = gameBoard.getCurrentPlayer().makeMove(move);
+                            if (transition.getMoveStatus().isDone()) {
+                                gameBoard = transition.getTransitionBoard();
+                                // TODO: add move that was made to the move log
+                            }
+                            sourceTile = null;
+                            destinationTile = null;
+                            playerMovedPiece = null;
+                        }
+                        SwingUtilities.invokeLater(() -> boardPanel.drawBoard(gameBoard));
+                    }
+                }
+
+                @Override
+                public void mousePressed(MouseEvent mouseEvent) {
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent mouseEvent) {
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent mouseEvent) {
+                }
+
+                @Override
+                public void mouseExited(MouseEvent mouseEvent) {
+                }
+            });
+
             validate();
         }
 
@@ -128,6 +182,14 @@ public class Table {
             } else {
                 setBackground(defaultTileColor);
             }
+        }
+
+        public void drawTile(Board board) {
+            assignTileColor();
+            setBorder(BorderFactory.createLineBorder(tileBorderColor));
+            assignTilePieceIcon(board);
+            validate();
+            repaint();
         }
     }
 }

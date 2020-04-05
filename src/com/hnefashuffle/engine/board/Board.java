@@ -9,6 +9,8 @@ import com.hnefashuffle.engine.player.DefenderPlayer;
 import com.hnefashuffle.engine.player.Player;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Board {
 
@@ -75,6 +77,11 @@ public class Board {
             }
         }
         return activePieces;
+    }
+
+    public Collection<Move> getAllLegalMoves() {
+        return Stream.concat(this.defendersPlayer.getLegalMoves().stream(),
+                this.attackersPlayer.getLegalMoves().stream()).collect(Collectors.toList());
     }
 
     public Tile getTile(Coordinates tileCoordinates) {

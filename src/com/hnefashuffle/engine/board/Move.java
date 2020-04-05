@@ -18,8 +18,24 @@ public class Move {
         return this.movedPiece;
     }
 
+    public Coordinates getCurrentCoordinate() {
+        return this.movedPiece.getPieceCoordinates();
+    }
+
     public Coordinates getDestinationCoordinates() {
         return this.destinationCoordinates;
+    }
+
+    public static Move createMove(Board board,
+                                  Coordinates currentCoordinates,
+                                  Coordinates destinationCoordinates) {
+        for(Move move : board.getAllLegalMoves()) {
+            if (move.getCurrentCoordinate() == currentCoordinates &&
+                    move.getDestinationCoordinates() == destinationCoordinates) {
+                return move;
+            }
+        }
+        return null;
     }
 
     public Board execute() {

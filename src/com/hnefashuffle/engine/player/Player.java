@@ -18,6 +18,10 @@ public abstract class Player {
         this.legalMoves = legalMoves;
     }
 
+    public Collection<Move> getLegalMoves() {
+        return this.legalMoves;
+    }
+
     public boolean isMoveLegal(Move move) {
         return this.legalMoves.contains(move);
     }
