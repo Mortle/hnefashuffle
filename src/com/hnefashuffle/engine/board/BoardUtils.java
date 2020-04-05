@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class BoardUtils {
 
-    public static final int SIZE = 11;
+    public static int SIZE = 11;
 
     public static boolean isValidPath(Coordinates pieceCoordinates, Coordinates destinationCoordinates, Board board) {
 
