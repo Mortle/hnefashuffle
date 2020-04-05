@@ -10,11 +10,21 @@ public enum Union {
         public Player choosePlayer(AttackerPlayer attackersPlayer, DefenderPlayer defendersPlayer) {
             return defendersPlayer;
         }
+
+        @Override
+        public String toString() {
+            return "Attacker";
+        }
     },
     DEFENDER {
         @Override
         public Player choosePlayer(AttackerPlayer attackersPlayer, DefenderPlayer defendersPlayer) {
             return attackersPlayer;
+        }
+
+        @Override
+        public String toString() {
+            return "Defender";
         }
     };
 

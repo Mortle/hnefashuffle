@@ -18,8 +18,24 @@ public class Move {
         return this.movedPiece;
     }
 
+    public Coordinates getCurrentCoordinate() {
+        return this.movedPiece.getPieceCoordinates();
+    }
+
     public Coordinates getDestinationCoordinates() {
         return this.destinationCoordinates;
+    }
+
+    public static Move createMove(Board board,
+                                  Coordinates currentCoordinates,
+                                  Coordinates destinationCoordinates) {
+        for(Move move : board.getAllLegalMoves()) {
+            if (move.getCurrentCoordinate() == currentCoordinates &&
+                    move.getDestinationCoordinates() == destinationCoordinates) {
+                return move;
+            }
+        }
+        return null;
     }
 
     public Board execute() {
@@ -35,7 +51,7 @@ public class Move {
         }
         // Move the movedPiece
         builder.setPiece(this.movedPiece.movePiece(this));
-        builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getUnion());
+        builder.setMoveMaker(this.board.getCurrentPlayer().getUnion());
 
         return builder.build();
     }

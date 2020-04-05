@@ -23,6 +23,7 @@ public class Viking extends Piece {
                 Tile destinationTile = board.getTile(destinationCoordinates);
 
                 assert destinationTile != null;
+                assert destinationCoordinates != null;
                 if (!destinationTile.isOccupied() &&
                     destinationTile.getType().equals("default") &&
                     this.pieceCoordinates != destinationCoordinates &&

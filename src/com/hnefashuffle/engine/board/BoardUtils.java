@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class BoardUtils {
 
-    public static final int SIZE = 11;
+    public static int SIZE = 11;
 
     public static boolean isValidPath(Coordinates pieceCoordinates, Coordinates destinationCoordinates, Board board) {
 
@@ -19,14 +19,14 @@ public class BoardUtils {
         boolean isClear = true;
         if (equalX) {
             for(int x = pieceCoordinates.getXCoordinate(); x < destinationCoordinates.getXCoordinate() + 1; x++) {
-                if(Objects.requireNonNull(board.getTile(Coordinates.getCoordinates(x, pieceCoordinates.getYCoordinate()))).isOccupied()) {
+                if(Objects.requireNonNull(board.getTile(Coordinates.getCoordinates(x, destinationCoordinates.getYCoordinate()))).isOccupied()) {
                     isClear = false;
                     break;
                 }
             }
         } else {
             for(int y = pieceCoordinates.getYCoordinate(); y < destinationCoordinates.getYCoordinate() + 1; y++) {
-                if(Objects.requireNonNull(board.getTile(Coordinates.getCoordinates(pieceCoordinates.getXCoordinate(), y))).isOccupied()) {
+                if(Objects.requireNonNull(board.getTile(Coordinates.getCoordinates(destinationCoordinates.getXCoordinate(), y))).isOccupied()) {
                     isClear = false;
                     break;
                 }
