@@ -24,7 +24,10 @@ public abstract class Tile {
 
                 if (i == j && i == BoardUtils.SIZE / 2) {
                     emptyTileMap.put(coordinates, new EmptyTile(coordinates, "throne"));
-                } else if (i == 0 || j == 0 || i == BoardUtils.SIZE - 1 || j == BoardUtils.SIZE - 1) {
+                } else if ((i == 0 && j == 0) ||
+                           (i == 0 && j == BoardUtils.SIZE - 1) ||
+                           (i == BoardUtils.SIZE - 1 && j == 0) ||
+                           (i == BoardUtils.SIZE - 1 && j == BoardUtils.SIZE - 1)) {
                     emptyTileMap.put(coordinates, new EmptyTile(coordinates, "corner"));
                 } else {
                     emptyTileMap.put(coordinates, new EmptyTile(coordinates, "default"));
