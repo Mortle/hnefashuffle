@@ -47,7 +47,6 @@ public class Board {
     public Collection<Piece> getDefendersPieces() {
         return this.defendersPieces;
     }
-
     public King getKing() {
         for(Piece piece : defendersPieces) {
             if(piece.isKing()) {
@@ -97,7 +96,10 @@ public class Board {
 
                 if (i == j && i == BoardUtils.SIZE / 2) {
                     tiles.put(tileCoordinates, Tile.createTile(tileCoordinates, builder.boardConfig.get(tileCoordinates), "throne"));
-                } else if (i == 0 || j == 0 || i == BoardUtils.SIZE - 1 || j == BoardUtils.SIZE - 1) {
+                } else if ((i == 0 && j == 0) ||
+                        (i == 0 && j == BoardUtils.SIZE - 1) ||
+                        (i == BoardUtils.SIZE - 1 && j == 0) ||
+                        (i == BoardUtils.SIZE - 1 && j == BoardUtils.SIZE - 1)) {
                     tiles.put(tileCoordinates, Tile.createTile(tileCoordinates, builder.boardConfig.get(tileCoordinates), "corner"));
                 } else {
                     tiles.put(tileCoordinates, Tile.createTile(tileCoordinates, builder.boardConfig.get(tileCoordinates), "default"));
@@ -187,9 +189,8 @@ public class Board {
             return this;
         }
 
-        public Builder setMoveMaker(Union nextMoveMaker) {
+        public void setMoveMaker(Union nextMoveMaker) {
             this.nextMoveMaker = nextMoveMaker;
-            return this;
         }
 
         public Board build() {

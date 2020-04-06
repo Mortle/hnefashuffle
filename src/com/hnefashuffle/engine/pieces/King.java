@@ -65,7 +65,7 @@ public class King extends Piece {
         }
 
         for(Tile tile : candidateTiles) {
-            if (tile.getType().equals("corner") || tile.getType().equals("throne")) {
+            if (tile.getType().equals("throne")) {
                 surroundersCounter++;
             } else if (tile.getPiece() != null && tile.getPiece().getPieceUnion() == Union.ATTACKER) {
                 surroundersCounter++;

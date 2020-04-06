@@ -12,6 +12,11 @@ public enum Union {
         }
 
         @Override
+        public Union getOppositeUnion() {
+            return Union.DEFENDER;
+        }
+
+        @Override
         public String toString() {
             return "Attacker";
         }
@@ -23,10 +28,18 @@ public enum Union {
         }
 
         @Override
+        public Union getOppositeUnion() {
+            return Union.ATTACKER;
+        }
+
+        @Override
         public String toString() {
             return "Defender";
         }
+
+
     };
 
     public abstract Player choosePlayer(AttackerPlayer attackersPlayer, DefenderPlayer defendersPlayer);
+    public abstract Union getOppositeUnion();
 }

@@ -64,7 +64,7 @@ public class Viking extends Piece {
                 } else {
                     horizontalDangerCounter++;
                 }
-            } else if (tile.getPiece() != null && tile.getPiece().getPieceUnion() == Union.ATTACKER) {
+            } else if (tile.getPiece() != null && tile.getPiece().getPieceUnion() == this.getPieceUnion().getOppositeUnion()) {
                 if (direction.equals("right") || direction.equals("left")) {
                     horizontalDangerCounter++;
                 } else {
@@ -72,7 +72,7 @@ public class Viking extends Piece {
                 }
             }
         }
-        return horizontalDangerCounter == 2 || verticalDangerCounter == 2;
+        return horizontalDangerCounter >= 2 || verticalDangerCounter >= 2;
     }
 
     @Override

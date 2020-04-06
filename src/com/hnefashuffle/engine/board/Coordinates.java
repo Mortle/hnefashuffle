@@ -28,7 +28,10 @@ public class Coordinates {
         List<Coordinates> cornersCoordinates = new ArrayList<>();
         for(int i = 0; i < BoardUtils.SIZE; i++) {
             for(int j = 0; j < BoardUtils.SIZE; j++) {
-                if((i == 0 && j == 0) || (i == 0 && j == 10) || (i == 10 && j == 0) || (i == 10 && j == 10)) {
+                if((i == 0 && j == 0) ||
+                        (i == 0 && j == BoardUtils.SIZE - 1) ||
+                        (i == BoardUtils.SIZE - 1 && j == 0) ||
+                        (i == BoardUtils.SIZE - 1 && j == BoardUtils.SIZE - 1)) {
                     cornersCoordinates.add(Coordinates.getCoordinates(i, j));
                 }
             }

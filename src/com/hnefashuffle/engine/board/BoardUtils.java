@@ -17,22 +17,39 @@ public class BoardUtils {
         }
 
         boolean isClear = true;
-        if (equalX) {
-            for(int x = pieceCoordinates.getXCoordinate(); x < destinationCoordinates.getXCoordinate() + 1; x++) {
-                if(Objects.requireNonNull(board.getTile(Coordinates.getCoordinates(x, destinationCoordinates.getYCoordinate()))).isOccupied()) {
-                    isClear = false;
-                    break;
+        if (equalY) {
+            if(pieceCoordinates.getXCoordinate() < destinationCoordinates.getXCoordinate()) {
+                for(int i = pieceCoordinates.getXCoordinate() + 1; i < destinationCoordinates.getXCoordinate(); i++) {
+                    if(Objects.requireNonNull(board.getTile(Coordinates.getCoordinates(i, destinationCoordinates.getYCoordinate()))).isOccupied()) {
+                        isClear = false;
+                        break;
+                    }
+                }
+            } else {
+                for(int i = pieceCoordinates.getXCoordinate() - 1; i > destinationCoordinates.getXCoordinate(); i--) {
+                    if(Objects.requireNonNull(board.getTile(Coordinates.getCoordinates(i, destinationCoordinates.getYCoordinate()))).isOccupied()) {
+                        isClear = false;
+                        break;
+                    }
                 }
             }
         } else {
-            for(int y = pieceCoordinates.getYCoordinate(); y < destinationCoordinates.getYCoordinate() + 1; y++) {
-                if(Objects.requireNonNull(board.getTile(Coordinates.getCoordinates(destinationCoordinates.getXCoordinate(), y))).isOccupied()) {
-                    isClear = false;
-                    break;
+            if(pieceCoordinates.getYCoordinate() < destinationCoordinates.getYCoordinate()) {
+                for(int i = pieceCoordinates.getYCoordinate() + 1; i < destinationCoordinates.getYCoordinate(); i++) {
+                    if(Objects.requireNonNull(board.getTile(Coordinates.getCoordinates(destinationCoordinates.getXCoordinate(), i))).isOccupied()) {
+                        isClear = false;
+                        break;
+                    }
+                }
+            } else {
+                for(int i = pieceCoordinates.getYCoordinate() - 1; i > destinationCoordinates.getYCoordinate(); i--) {
+                    if(Objects.requireNonNull(board.getTile(Coordinates.getCoordinates(destinationCoordinates.getXCoordinate(), i))).isOccupied()) {
+                        isClear = false;
+                        break;
+                    }
                 }
             }
         }
-
         return isClear;
     }
 
