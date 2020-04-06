@@ -12,7 +12,7 @@ public abstract class Tile {
     String tileType;
     Coordinates tileCoordinates;
 
-    private static Map<Coordinates, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
+    public static Map<Coordinates, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
     private static Map<Coordinates, EmptyTile> createAllPossibleEmptyTiles() {
 

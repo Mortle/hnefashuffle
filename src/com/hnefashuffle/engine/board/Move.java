@@ -42,7 +42,7 @@ public class Move {
         Board.Builder builder = new Board.Builder();
 
         for(Piece piece : this.board.getCurrentPlayer().getActivePieces()) {
-            if(!this.movedPiece.equals(piece)) {
+            if (!this.movedPiece.equals(piece)) {
                 builder.setPiece(piece);
             }
         }
@@ -52,6 +52,9 @@ public class Move {
         // Move the movedPiece
         builder.setPiece(this.movedPiece.movePiece(this));
         builder.setMoveMaker(this.board.getCurrentPlayer().getUnion());
+
+        // Remove captured pieces from board
+        builder.boardConfig.entrySet().removeIf(e -> e.getValue().isCaptured(builder.build()));
 
         return builder.build();
     }
