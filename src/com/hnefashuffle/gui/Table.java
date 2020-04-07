@@ -6,8 +6,6 @@ import com.hnefashuffle.engine.pieces.Piece;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -42,6 +40,7 @@ public class Table {
     private static Color cornerTileColor = Color.decode("#E6D4A8");
     private static Color throneTileColor = Color.decode("#E6D4A8");
     private static Color tileBorderColor = Color.decode("#000000");
+    private static Color tileHighlightColor = Color.decode("#CCCCFF");
 
     public Table() {
         this.highlightLegalMoves = true;
@@ -68,24 +67,26 @@ public class Table {
 
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
-        JMenuItem openPGNmenuItem = new JMenuItem("Load PGN File");
-        openPGNmenuItem.addActionListener(actionEvent -> System.out.println("Open Up that PGN File!"));
-        fileMenu.add(openPGNmenuItem);
+
+        JMenuItem loadGame = new JMenuItem("Load Game");
+        loadGame.addActionListener(actionEvent -> System.out.println("Loaded Game!"));
+        fileMenu.add(loadGame);
+
+        JMenuItem saveGame = new JMenuItem("Save Game");
+        saveGame.addActionListener(actionEvent -> System.out.println("Saved Game!"));
+        fileMenu.add(saveGame);
+
         JMenuItem exitMenuItem = new JMenuItem("Exit");
         exitMenuItem.addActionListener(actionEvent -> System.exit(0));
         fileMenu.add(exitMenuItem);
+
         return fileMenu;
     }
 
     private JMenu createPreferencesMenu() {
         JMenu preferencesMenu = new JMenu("Preferences");
         JCheckBoxMenuItem legalMoveHighlighterCheckbox = new JCheckBoxMenuItem("Highlight legal moves", true);
-        legalMoveHighlighterCheckbox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                highlightLegalMoves = legalMoveHighlighterCheckbox.isSelected();
-            }
-        });
+        legalMoveHighlighterCheckbox.addActionListener(actionEvent -> highlightLegalMoves = legalMoveHighlighterCheckbox.isSelected());
         preferencesMenu.add(legalMoveHighlighterCheckbox);
         return preferencesMenu;
     }
@@ -120,6 +121,7 @@ public class Table {
 
     private class TilePanel extends JPanel {
         private Coordinates tileCoordinates;
+        private boolean highlightCandidateTile;
 
         TilePanel(BoardPanel boardPanel, Coordinates tileCoordinates) {
             super(new GridBagLayout());
@@ -133,16 +135,16 @@ public class Table {
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
                     if(isRightMouseButton(mouseEvent)) {
-                        sourceTile = null;
-                        destinationTile = null;
-                        playerMovedPiece = null;
+                        clearSelections();
                     } else if (isLeftMouseButton(mouseEvent)) {
+                        // Source tile selected
                         if (sourceTile == null) {
                             sourceTile = gameBoard.getTile(tileCoordinates);
                             playerMovedPiece = sourceTile.getPiece();
                             if (playerMovedPiece == null) {
                                 sourceTile = null;
                             }
+                        // Destination tile selected
                         } else {
                             destinationTile = gameBoard.getTile(tileCoordinates);
                             Move move = Move.createMove(gameBoard, sourceTile.getTileCoordinates(), destinationTile.getTileCoordinates());
@@ -151,32 +153,38 @@ public class Table {
                                 gameBoard = transition.getTransitionBoard();
                                 // TODO: add move that was made to the move log
                             }
-                            sourceTile = null;
-                            destinationTile = null;
-                            playerMovedPiece = null;
+                            clearSelections();
                         }
                         SwingUtilities.invokeLater(() -> boardPanel.drawBoard(gameBoard));
                     }
                 }
 
                 @Override
-                public void mousePressed(MouseEvent mouseEvent) {
-                }
+                public void mousePressed(MouseEvent mouseEvent) {}
 
                 @Override
-                public void mouseReleased(MouseEvent mouseEvent) {
-                }
+                public void mouseReleased(MouseEvent mouseEvent) {}
 
                 @Override
                 public void mouseEntered(MouseEvent mouseEvent) {
+                    highlightCandidateTile = true;
+                    SwingUtilities.invokeLater(() -> boardPanel.drawBoard(gameBoard));
                 }
 
                 @Override
                 public void mouseExited(MouseEvent mouseEvent) {
+                    highlightCandidateTile = false;
+                    SwingUtilities.invokeLater(() -> boardPanel.drawBoard(gameBoard));
                 }
             });
 
             validate();
+        }
+
+        private void clearSelections() {
+            sourceTile = null;
+            destinationTile = null;
+            playerMovedPiece = null;
         }
 
         private void assignTilePieceIcon(Board board) {
@@ -208,8 +216,16 @@ public class Table {
             setBorder(BorderFactory.createLineBorder(tileBorderColor));
             assignTilePieceIcon(board);
             highlightLegals(board);
+            highlightTile(board);
             validate();
             repaint();
+        }
+
+        private void highlightTile(Board board) {
+            if(highlightCandidateTile && board.getTile(tileCoordinates).isOccupied() &&
+                    board.getTile(tileCoordinates).getPiece().getPieceUnion() == board.getCurrentPlayer().getUnion()) {
+                setBackground(tileHighlightColor);
+            }
         }
 
         private void highlightLegals(Board board) {
