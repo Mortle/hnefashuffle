@@ -58,17 +58,30 @@ public class Viking extends Piece {
         for(Map.Entry<String, Tile> entry : candidateTiles.entrySet()) {
             Tile tile = entry.getValue();
             String direction = entry.getKey();
-            if (tile.getType().equals("corner") || tile.getType().equals("throne")) {
+            if (tile.getType().equals("corner")) {
+                if (direction.equals("upper") || direction.equals("lower")) { verticalDangerCounter++; }
+                else { horizontalDangerCounter++; }
+            } else if (tile.getType().equals("throne")) {
+                if (tile.isOccupied() && tile.getPiece().isKing()) {
+                    if (tile.getPiece().getPieceUnion() != this.getPieceUnion()) {
+                        if (direction.equals("upper") || direction.equals("lower")) {
+                            verticalDangerCounter++;
+                        } else {
+                            horizontalDangerCounter++;
+                        }
+                    }
+                } else {
+                    if (direction.equals("upper") || direction.equals("lower")) {
+                        verticalDangerCounter++;
+                    } else {
+                        horizontalDangerCounter++;
+                    }
+                }
+            } else if (tile.getPiece() != null && tile.getPiece().getPieceUnion() == this.getPieceUnion().getOppositeUnion()) {
                 if (direction.equals("upper") || direction.equals("lower")) {
                     verticalDangerCounter++;
                 } else {
                     horizontalDangerCounter++;
-                }
-            } else if (tile.getPiece() != null && tile.getPiece().getPieceUnion() == this.getPieceUnion().getOppositeUnion()) {
-                if (direction.equals("right") || direction.equals("left")) {
-                    horizontalDangerCounter++;
-                } else {
-                    verticalDangerCounter++;
                 }
             }
         }
