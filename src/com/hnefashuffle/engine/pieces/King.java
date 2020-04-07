@@ -48,8 +48,8 @@ public class King extends Piece {
     @Override
     public boolean isCaptured(Board board) {
         int surroundersCounter = 0;
-        int xCoordinate = pieceCoordinates.getYCoordinate();
-        int yCoordinate = pieceCoordinates.getXCoordinate();
+        int xCoordinate = pieceCoordinates.getXCoordinate();
+        int yCoordinate = pieceCoordinates.getYCoordinate();
 
         List<Coordinates> candidateCoordinates = new ArrayList<>();
         candidateCoordinates.add(Coordinates.getCoordinates(xCoordinate, yCoordinate + 1));

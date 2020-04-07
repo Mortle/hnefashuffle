@@ -40,8 +40,8 @@ public class Viking extends Piece {
     public boolean isCaptured(Board board) {
         int horizontalDangerCounter = 0;
         int verticalDangerCounter = 0;
-        int xCoordinate = pieceCoordinates.getYCoordinate();
-        int yCoordinate = pieceCoordinates.getXCoordinate();
+        int xCoordinate = pieceCoordinates.getXCoordinate();
+        int yCoordinate = pieceCoordinates.getYCoordinate();
         Map<String, Coordinates> candidateCoordinates = new HashMap<>();
         Map<String, Tile> candidateTiles = new HashMap<>();
 
@@ -58,17 +58,30 @@ public class Viking extends Piece {
         for(Map.Entry<String, Tile> entry : candidateTiles.entrySet()) {
             Tile tile = entry.getValue();
             String direction = entry.getKey();
-            if (tile.getType().equals("corner") || tile.getType().equals("throne")) {
+            if (tile.getType().equals("corner")) {
+                if (direction.equals("upper") || direction.equals("lower")) { verticalDangerCounter++; }
+                else { horizontalDangerCounter++; }
+            } else if (tile.getType().equals("throne")) {
+                if (tile.isOccupied() && tile.getPiece().isKing()) {
+                    if (tile.getPiece().getPieceUnion() != this.getPieceUnion()) {
+                        if (direction.equals("upper") || direction.equals("lower")) {
+                            verticalDangerCounter++;
+                        } else {
+                            horizontalDangerCounter++;
+                        }
+                    }
+                } else {
+                    if (direction.equals("upper") || direction.equals("lower")) {
+                        verticalDangerCounter++;
+                    } else {
+                        horizontalDangerCounter++;
+                    }
+                }
+            } else if (tile.getPiece() != null && tile.getPiece().getPieceUnion() == this.getPieceUnion().getOppositeUnion()) {
                 if (direction.equals("upper") || direction.equals("lower")) {
                     verticalDangerCounter++;
                 } else {
                     horizontalDangerCounter++;
-                }
-            } else if (tile.getPiece() != null && tile.getPiece().getPieceUnion() == this.getPieceUnion().getOppositeUnion()) {
-                if (direction.equals("right") || direction.equals("left")) {
-                    horizontalDangerCounter++;
-                } else {
-                    verticalDangerCounter++;
                 }
             }
         }
