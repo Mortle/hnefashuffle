@@ -54,7 +54,8 @@ public class Move {
         builder.setMoveMaker(this.board.getCurrentPlayer().getUnion());
 
         // Remove captured pieces from board
-        builder.boardConfig.entrySet().removeIf(e -> e.getValue().isCaptured(builder.build()));
+        Board pendingBoard = builder.build();
+        builder.boardConfig.entrySet().removeIf(e -> e.getValue().isCaptured(pendingBoard));
 
         return builder.build();
     }

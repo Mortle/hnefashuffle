@@ -40,8 +40,8 @@ public class Viking extends Piece {
     public boolean isCaptured(Board board) {
         int horizontalDangerCounter = 0;
         int verticalDangerCounter = 0;
-        int xCoordinate = pieceCoordinates.getYCoordinate();
-        int yCoordinate = pieceCoordinates.getXCoordinate();
+        int xCoordinate = pieceCoordinates.getXCoordinate();
+        int yCoordinate = pieceCoordinates.getYCoordinate();
         Map<String, Coordinates> candidateCoordinates = new HashMap<>();
         Map<String, Tile> candidateTiles = new HashMap<>();
 
