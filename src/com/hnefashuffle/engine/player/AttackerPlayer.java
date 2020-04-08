@@ -29,6 +29,6 @@ public class AttackerPlayer extends Player {
 
     @Override
     public boolean won() {
-        return board.getKing().isCaptured(board);
+        return board.getKing() == null;
     }
 }
