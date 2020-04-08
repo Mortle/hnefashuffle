@@ -30,7 +30,7 @@ public class Table {
     private Tile destinationTile;
     private Piece playerMovedPiece;
 
-    private static Dimension OUTER_FRAME_DIMENSION = new Dimension(600,600);
+    private static Dimension OUTER_FRAME_DIMENSION = new Dimension(750,750);
     private static Dimension BOARD_PANEL_DIMENSION = new Dimension(440,440);
     private static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
 
@@ -48,6 +48,7 @@ public class Table {
         this.gameFrame = new JFrame("Hnefashuffle");
         this.gameFrame.setLayout(new BorderLayout());
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
+        this.gameFrame.setResizable(false);
 
         JMenuBar tableMenuBar = createTableMenuBar();
         this.gameFrame.setJMenuBar(tableMenuBar);
