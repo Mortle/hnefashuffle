@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
 
@@ -24,6 +25,7 @@ public class Table {
     private BoardPanel boardPanel;
     private Board gameBoard;
 
+    private boolean gameEnded;
     private boolean highlightLegalMoves;
 
     private Tile sourceTile;
@@ -43,12 +45,14 @@ public class Table {
     private static Color tileHighlightColor = Color.decode("#CCCCFF");
 
     public Table() {
-        this.highlightLegalMoves = true;
         this.gameBoard = Board.createInitialBoard();
         this.gameFrame = new JFrame("Hnefashuffle");
         this.gameFrame.setLayout(new BorderLayout());
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
         this.gameFrame.setResizable(false);
+
+        this.highlightLegalMoves = true;
+        this.gameEnded = false;
 
         JMenuBar tableMenuBar = createTableMenuBar();
         this.gameFrame.setJMenuBar(tableMenuBar);
@@ -98,6 +102,7 @@ public class Table {
         BoardPanel() {
             super(new GridLayout(BoardUtils.SIZE, BoardUtils.SIZE));
             this.boardTiles = new ArrayList<>();
+            gameEnded = false;
             for(int i = 0; i < BoardUtils.SIZE; i++) {
                 for(int j = 0; j < BoardUtils.SIZE; j++) {
                     TilePanel tilePanel = new TilePanel(this, Coordinates.getCoordinates(i, j));
@@ -110,13 +115,22 @@ public class Table {
         }
 
         public void drawBoard(Board board) {
-            removeAll();
-            for(TilePanel tilePanel : boardTiles) {
-                tilePanel.drawTile(board);
-                add(tilePanel);
+            if (!gameEnded) {
+                removeAll();
+                for (TilePanel tilePanel : boardTiles) {
+                    tilePanel.drawTile(board);
+                    add(tilePanel);
+                }
+                validate();
+                repaint();
+                if (board.getAttackersPlayer().won()) {
+                    showMessageDialog(null, "Attackers won!");
+                    gameEnded = true;
+                } else if (board.getDefendersPlayer().won()) {
+                    showMessageDialog(null, "Defenders won!");
+                    gameEnded = true;
+                }
             }
-            validate();
-            repaint();
         }
     }
 
@@ -135,9 +149,9 @@ public class Table {
             addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
-                    if(isRightMouseButton(mouseEvent)) {
+                    if(isRightMouseButton(mouseEvent) && !gameEnded) {
                         clearSelections();
-                    } else if (isLeftMouseButton(mouseEvent)) {
+                    } else if (isLeftMouseButton(mouseEvent) && !gameEnded) {
                         // Source tile selected
                         if (sourceTile == null) {
                             sourceTile = gameBoard.getTile(tileCoordinates);
@@ -168,14 +182,18 @@ public class Table {
 
                 @Override
                 public void mouseEntered(MouseEvent mouseEvent) {
-                    highlightCandidateTile = true;
-                    SwingUtilities.invokeLater(() -> boardPanel.drawBoard(gameBoard));
+                    if (!gameEnded) {
+                        highlightCandidateTile = true;
+                        SwingUtilities.invokeLater(() -> drawTile(gameBoard));
+                    }
                 }
 
                 @Override
                 public void mouseExited(MouseEvent mouseEvent) {
-                    highlightCandidateTile = false;
-                    SwingUtilities.invokeLater(() -> boardPanel.drawBoard(gameBoard));
+                    if (!gameEnded) {
+                        highlightCandidateTile = false;
+                        SwingUtilities.invokeLater(() -> drawTile(gameBoard));
+                    }
                 }
             });
 
