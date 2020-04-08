@@ -29,6 +29,6 @@ public class DefenderPlayer extends Player {
 
     @Override
     public boolean won() {
-        return board.getKing().isOnCornerTile();
+        return board.getKing() != null && board.getKing().isOnCornerTile();
     }
 }

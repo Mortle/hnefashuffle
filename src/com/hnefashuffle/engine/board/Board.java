@@ -53,7 +53,7 @@ public class Board {
                 return (King) piece;
             }
         }
-        throw new RuntimeException("Should not reach here! Not a valid board!");
+        return null;
     }
 
     private Collection<Move> calculateLegalMoves(Collection<Piece> pieces) {
