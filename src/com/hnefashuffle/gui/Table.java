@@ -73,13 +73,13 @@ public class Table {
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
 
-        JMenuItem loadGame = new JMenuItem("Load Game");
-        loadGame.addActionListener(actionEvent -> System.out.println("Loaded Game!"));
+        JMenuItem loadGame = new JMenuItem("New Game");
+        loadGame.addActionListener(actionEvent -> {
+            this.gameEnded = false;
+            this.gameBoard = Board.createInitialBoard();
+            this.boardPanel.drawBoard(this.gameBoard);
+        });
         fileMenu.add(loadGame);
-
-        JMenuItem saveGame = new JMenuItem("Save Game");
-        saveGame.addActionListener(actionEvent -> System.out.println("Saved Game!"));
-        fileMenu.add(saveGame);
 
         JMenuItem exitMenuItem = new JMenuItem("Exit");
         exitMenuItem.addActionListener(actionEvent -> System.exit(0));
