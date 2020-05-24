@@ -12,7 +12,7 @@ public class GameHistoryPanel extends JPanel {
 
     private DataModel model;
     private JScrollPane scrollPane;
-    private static Dimension HISTORY_PANEL_DIMENSION = new Dimension(150, 150);
+    private static Dimension HISTORY_PANEL_DIMENSION = new Dimension(175, 175);
 
     public GameHistoryPanel() {
         this.setLayout(new BorderLayout());
@@ -38,6 +38,38 @@ public class GameHistoryPanel extends JPanel {
             col = 0;
         }
         this.model.setNextValue(col, move.toString());
+    }
+
+    public void load(String[] data) {
+        int col = 0;
+        for(String move : data) {
+            this.model.setNextValue(col, move);
+            if(col == 0) {
+                col = 1;
+            } else {
+                col = 0;
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Row row : this.model.values) {
+            String defenderMove = row.getDefenderMove();
+            String attackerMove = row.getAttackerMove();
+
+            if(attackerMove != null && !attackerMove.isEmpty()) {
+                sb.append(attackerMove);
+                sb.append(", ");
+            }
+            if(defenderMove != null && !defenderMove.isEmpty()) {
+                sb.append(defenderMove);
+                sb.append(", ");
+            }
+        }
+
+        return sb.toString();
     }
 
     private static class Row {
@@ -73,8 +105,8 @@ public class GameHistoryPanel extends JPanel {
 
         public void clear() {
             this.values.clear();
-            fireTableDataChanged();
             setRowCount(0);
+            fireTableDataChanged();
         }
 
         public void setNextValue(int col, String move) {

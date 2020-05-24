@@ -32,11 +32,11 @@ public class Table {
     private Tile destinationTile;
     private Piece playerMovedPiece;
 
-    private static Dimension OUTER_FRAME_DIMENSION = new Dimension(900,750);
+    private static Dimension OUTER_FRAME_DIMENSION = new Dimension(910,750);
     private static Dimension BOARD_PANEL_DIMENSION = new Dimension(440,440);
     private static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
 
-    private static String pieceIconPath = "res/pieces/default/";
+    private static String PIECE_ICON_PATH = "res/pieces/default/";
 
     private static Color defaultTileColor = Color.decode("#FFF1CE");
     private static Color cornerTileColor = Color.decode("#E6D4A8");
@@ -94,9 +94,10 @@ public class Table {
                     this.gameBoard = SaveUtilities.loadBoard(chooser.getSelectedFile());
                     this.gameEnded = false;
                     this.gameHistoryPanel.clear();
+                    this.gameHistoryPanel.load(SaveUtilities.loadGameHistory(chooser.getSelectedFile()));
                     this.boardPanel.drawBoard(this.gameBoard);
                 }
-                catch (IOException | NoSuchElementException ex) {
+                catch (IOException | NoSuchElementException | NullPointerException ex) {
                     JOptionPane.showMessageDialog(
                             this.gameFrame,
                             "Wrong save file format",
@@ -125,9 +126,12 @@ public class Table {
             final int option = chooser.showSaveDialog(this.gameFrame);
             if (option == JFileChooser.APPROVE_OPTION) {
                 try {
-                    SaveUtilities.saveBoard(this.gameBoard, chooser.getSelectedFile());
+                    SaveUtilities.saveGame(
+                            this.gameBoard,
+                            this.gameHistoryPanel.toString(),
+                            chooser.getSelectedFile());
                     showMessageDialog(null, "Successfully saved the game!");
-                } catch (IOException ex) {
+                } catch (IOException | NullPointerException ex) {
                     JOptionPane.showMessageDialog(
                             this.gameFrame,
                             "Something went wrong",
@@ -270,7 +274,7 @@ public class Table {
             if (board.getTile(this.tileCoordinates).isOccupied()) {
                 try {
                     BufferedImage image =
-                            ImageIO.read(new File(pieceIconPath + board.getTile(this.tileCoordinates).getPiece().getPieceUnion().toString().substring(0, 1) +
+                            ImageIO.read(new File(PIECE_ICON_PATH + board.getTile(this.tileCoordinates).getPiece().getPieceUnion().toString().substring(0, 1) +
                                     board.getTile(this.tileCoordinates).getPiece().toString() + ".png"));
                     add(new JLabel(new ImageIcon(image)));
                 } catch (IOException e) {

@@ -25,6 +25,9 @@ public class SaveUtilities {
         Scanner scanner = new Scanner(file);
         builder.setMoveMaker(Union.valueOf(scanner.nextLine().toUpperCase()));
 
+        // Skip game history line
+        scanner.nextLine();
+
         while(scanner.hasNext()){
             String[] tokens = scanner.nextLine().split(" ");
 
@@ -42,13 +45,27 @@ public class SaveUtilities {
                 throw new IOException("Wrong save file format!");
             }
         }
+        scanner.close();
         return builder.build();
     }
 
-    public static void saveBoard(Board board, File file) throws IOException {
+    public static String[] loadGameHistory(File file) throws IOException, NoSuchElementException {
+        Scanner scanner = new Scanner(file);
+        scanner.nextLine();
+
+        String[] tokens = scanner.nextLine().split(", ");
+
+        scanner.close();
+        return tokens;
+    }
+
+    public static void saveGame(Board board, String gameHistory, File file) throws IOException {
         FileWriter writer = new FileWriter(file);
 
         writer.write(board.getCurrentPlayer().getUnion().getOppositeUnion().toString());
+        writer.write("\n");
+
+        writer.write(gameHistory);
         writer.write("\n");
 
         for(Piece piece : board.getPieces()) {
@@ -60,7 +77,6 @@ public class SaveUtilities {
                                 piece.getPieceUnion().toString()
                             ));
         }
-
         writer.close();
     }
 }
