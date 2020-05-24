@@ -26,6 +26,10 @@ public class GameHistoryPanel extends JPanel {
         this.setVisible(true);
     }
 
+    public void clear() {
+        this.model.clear();
+    }
+
     public void update(Move move) {
         int col;
         if(move.getMovedPiece().getPieceUnion().equals(Union.DEFENDER)) {
@@ -69,6 +73,7 @@ public class GameHistoryPanel extends JPanel {
 
         public void clear() {
             this.values.clear();
+            fireTableDataChanged();
             setRowCount(0);
         }
 

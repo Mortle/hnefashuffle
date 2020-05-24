@@ -79,6 +79,7 @@ public class Table {
         JMenuItem newGame = new JMenuItem("New Game");
         newGame.addActionListener(actionEvent -> {
             this.gameEnded = false;
+            this.gameHistoryPanel.clear();
             this.gameBoard = Board.createInitialBoard();
             this.boardPanel.drawBoard(this.gameBoard);
         });
@@ -92,6 +93,7 @@ public class Table {
                 try {
                     this.gameBoard = SaveUtilities.loadBoard(chooser.getSelectedFile());
                     this.gameEnded = false;
+                    this.gameHistoryPanel.clear();
                     this.boardPanel.drawBoard(this.gameBoard);
                 }
                 catch (IOException | NoSuchElementException ex) {
