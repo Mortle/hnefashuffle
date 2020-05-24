@@ -83,6 +83,11 @@ public class Board {
                 this.attackersPlayer.getLegalMoves().stream()).collect(Collectors.toList());
     }
 
+    public Collection<Piece> getPieces() {
+        return Stream.concat(this.getDefendersPieces().stream(),
+                this.getAttackersPieces().stream()).collect(Collectors.toList());
+    }
+
     public Tile getTile(Coordinates tileCoordinates) {
         return gameBoard.get(tileCoordinates);
     }

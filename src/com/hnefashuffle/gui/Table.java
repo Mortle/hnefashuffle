@@ -2,6 +2,7 @@ package com.hnefashuffle.gui;
 
 import com.hnefashuffle.engine.board.*;
 import com.hnefashuffle.engine.pieces.Piece;
+import com.hnefashuffle.saveio.SaveUtilities;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,9 +12,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -73,13 +72,66 @@ public class Table {
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
 
-        JMenuItem loadGame = new JMenuItem("New Game");
-        loadGame.addActionListener(actionEvent -> {
+        JMenuItem newGame = new JMenuItem("New Game");
+        newGame.addActionListener(actionEvent -> {
             this.gameEnded = false;
             this.gameBoard = Board.createInitialBoard();
             this.boardPanel.drawBoard(this.gameBoard);
         });
+        fileMenu.add(newGame);
+
+        JMenuItem loadGame = new JMenuItem("Load Game");
+        loadGame.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            int option = chooser.showOpenDialog(gameFrame);
+            if (option == JFileChooser.APPROVE_OPTION) {
+                try {
+                    this.gameBoard = SaveUtilities.loadBoard(chooser.getSelectedFile());
+                    this.gameEnded = false;
+                    this.boardPanel.drawBoard(this.gameBoard);
+                }
+                catch (IOException | NoSuchElementException ex) {
+                    JOptionPane.showMessageDialog(
+                            this.gameFrame,
+                            "Wrong save file format",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    ex.printStackTrace();
+                }
+            }
+        });
         fileMenu.add(loadGame);
+
+        JMenuItem saveGame = new JMenuItem("Save Game");
+        saveGame.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+                @Override
+                public String getDescription() {
+                    return ".hnef";
+                }
+                @Override
+                public boolean accept(File file) {
+                    return file.isDirectory() || file.getName().toLowerCase().endsWith("hnef");
+                }
+            });
+            final int option = chooser.showSaveDialog(this.gameFrame);
+            if (option == JFileChooser.APPROVE_OPTION) {
+                try {
+                    SaveUtilities.saveBoard(this.gameBoard, chooser.getSelectedFile());
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                            this.gameFrame,
+                            "Something went wrong",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    ex.printStackTrace();
+                }
+            }
+        });
+        fileMenu.add(saveGame);
 
         JMenuItem exitMenuItem = new JMenuItem("Exit");
         exitMenuItem.addActionListener(actionEvent -> System.exit(0));
