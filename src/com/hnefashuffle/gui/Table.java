@@ -22,6 +22,7 @@ import static javax.swing.SwingUtilities.isRightMouseButton;
 public class Table {
     private JFrame gameFrame;
     private BoardPanel boardPanel;
+    private GameHistoryPanel gameHistoryPanel;
     private Board gameBoard;
 
     private boolean gameEnded;
@@ -31,7 +32,7 @@ public class Table {
     private Tile destinationTile;
     private Piece playerMovedPiece;
 
-    private static Dimension OUTER_FRAME_DIMENSION = new Dimension(750,750);
+    private static Dimension OUTER_FRAME_DIMENSION = new Dimension(900,750);
     private static Dimension BOARD_PANEL_DIMENSION = new Dimension(440,440);
     private static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
 
@@ -58,6 +59,9 @@ public class Table {
 
         this.boardPanel = new BoardPanel();
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
+
+        this.gameHistoryPanel = new GameHistoryPanel();
+        this.gameFrame.add(this.gameHistoryPanel, BorderLayout.EAST);
 
         this.gameFrame.setVisible(true);
     }
@@ -120,6 +124,7 @@ public class Table {
             if (option == JFileChooser.APPROVE_OPTION) {
                 try {
                     SaveUtilities.saveBoard(this.gameBoard, chooser.getSelectedFile());
+                    showMessageDialog(null, "Successfully saved the game!");
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(
                             this.gameFrame,
@@ -218,7 +223,7 @@ public class Table {
                             MoveTransition transition = gameBoard.getCurrentPlayer().makeMove(move);
                             if (transition.getMoveStatus().isDone()) {
                                 gameBoard = transition.getTransitionBoard();
-                                // TODO: add move that was made to the move log
+                                gameHistoryPanel.update(move);
                             }
                             clearSelections();
                         }

@@ -61,6 +61,17 @@ public class Move {
     }
 
     @Override
+    public String toString() {
+        return String.format(
+                    "%d:%d → %d:%d",
+                    getCurrentCoordinate().getXCoordinate(),
+                    getCurrentCoordinate().getYCoordinate(),
+                    getDestinationCoordinates().getXCoordinate(),
+                    getDestinationCoordinates().getYCoordinate()
+                );
+    }
+
+    @Override
     public boolean equals(Object other) {
         if(this == other) {
             return true;
