@@ -24,6 +24,8 @@ public class Table {
     private BoardPanel boardPanel;
     private GameHistoryPanel gameHistoryPanel;
     private Board gameBoard;
+    private TimeThread timeThread;
+    private JLabel timeLabel;
 
     private boolean gameEnded;
     private boolean highlightLegalMoves;
@@ -62,6 +64,12 @@ public class Table {
 
         this.gameHistoryPanel = new GameHistoryPanel();
         this.gameFrame.add(this.gameHistoryPanel, BorderLayout.EAST);
+
+        this.timeLabel = new JLabel("Time: 00:00");
+        this.gameFrame.add(this.timeLabel, BorderLayout.SOUTH);
+
+        this.timeThread = new TimeThread(this);
+        this.timeThread.start();
 
         this.gameFrame.setVisible(true);
     }
@@ -157,6 +165,10 @@ public class Table {
         legalMoveHighlighterCheckbox.addActionListener(actionEvent -> highlightLegalMoves = legalMoveHighlighterCheckbox.isSelected());
         preferencesMenu.add(legalMoveHighlighterCheckbox);
         return preferencesMenu;
+    }
+
+    public void setTimeText(String time) {
+        this.timeLabel.setText("Time: " + time);
     }
 
     private class BoardPanel extends JPanel {
