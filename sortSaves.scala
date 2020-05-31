@@ -1,6 +1,5 @@
 import java.io.File
 
-import scala.collection.mutable
 import scala.io.Source
 
 object sortSaves {
